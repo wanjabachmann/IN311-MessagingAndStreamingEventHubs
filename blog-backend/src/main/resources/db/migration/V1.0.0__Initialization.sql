@@ -1,0 +1,10 @@
+CREATE DATABASE IF NOT EXISTS blogdb;
+/*  USE blogdb;*/
+
+CREATE TABLE IF NOT EXISTS Blog (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    isValid BOOLEAN NOT NULL,
+    validationDate DATE
+);

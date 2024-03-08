@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATASOURCE: "jdbc:mysql://mysql:3306/blogdb"
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: blogdb
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbuser
+    networks:
+      - blog-nw
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+
+  redpanda:
+    image: docker.redpanda.com/vectorized/redpanda:v23.3.5
+    command: redpanda start --advertise-kafka-addr redpanda-1:9092
+    ports:
+      - "9092:9092"
+    networks:
+      - blog-nw
+    container_name: redpanda-1
+
+  backend:
+    image: ghcr.io/wanjabachmann/blog-backend:latest
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    networks:
+      - blog-nw
+
+  textvalidator:
+    image: ghcr.io/wanjabachmann/textvalidator:latest
+    depends_on:
+      - mysql
+      - redpanda
+    networks:
+      - blog-nw
+
+networks:
+  blog-nw:
