@@ -116,6 +116,61 @@ httpie:
 http -v GET :8080/blogs
 ```
 
+# Event Hub Installation
+
+Reference: https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-quickstart-powershell
+
 ```PowerShell
-./mvnw quarkus:add-extension -Dextensions="org.apache.camel.quarkus:camel-quarkus-azure-eventhubs"
+cd ./blog-backend/mvnw quarkus:add-extension -Dextensions="org.apache.camel.quarkus:camel-quarkus-azure-eventhubs"
+```
+
+```PowerShell
+$rgName = "rg-blogbackend-prod-switzerlandnorth-001"
+$region = "switzerlandnorth"
+$namespaceName = "ns-aeh"
+
+# New-AzResourceGroup parameters
+$rgParams = @{
+    Name     = $rgName
+    Location = $region
+}
+
+# Create the Azure Resource Group
+New-AzResourceGroup @rgParams
+
+# New-AzEventHubNamespace parameters
+$namespaceParams = @{
+    ResourceGroupName = $rgName
+    Name     = $namespaceName
+    Location          = $region
+}
+
+# Create the Event Hub Namespace
+New-AzEventHubNamespace @namespaceParams
+
+
+# Event Hub parameters
+$ehubParams = @{
+    ResourceGroupName = $rgName
+    NamespaceName     = $namespaceName
+    EventHubName      = "eh-blog-001"
+}
+
+# Create the Azure Event Hub
+New-AzEventHub @ehubParams
+
+
+```
+
+Error Message insofern nur mit PowerShell ausgeführt:
+
+```
+The subscription is not registered to use namespace 'Microsoft.EventHub'. See
+| https://aka.ms/rps-not-found for how to register subscriptions.
+```
+
+Fix:
+
+```PowerShell
+az provider register --namespace 'Microsoft.EventHub'
 ```
