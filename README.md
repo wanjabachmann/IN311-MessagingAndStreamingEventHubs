@@ -116,6 +116,63 @@ httpie:
 http -v GET :8080/blogs
 ```
 
+# Event Hub Installation
+
+Reference: https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-quickstart-powershell
+
 ```PowerShell
-./mvnw quarkus:add-extension -Dextensions="org.apache.camel.quarkus:camel-quarkus-azure-eventhubs"
+cd ./blog-backend/mvnw quarkus:add-extension -Dextensions="org.apache.camel.quarkus:camel-quarkus-azure-eventhubs"
+```
+
+```PowerShell
+$rgName = "rg-blogbackend-prod-switzerlandnorth-001"
+$region = "switzerlandnorth"
+$namespaceName = "ns-aeh"
+
+# New-AzResourceGroup parameters
+$rgParams = @{
+    Name     = $rgName
+    Location = $region
+}
+
+# Create the Azure Resource Group
+New-AzResourceGroup @rgParams
+
+# Create an Event Hubs namespace.
+az eventhubs namespace create --name $namespaceName --resource-group $rgName -l $region --sku Standard
+
+# collect the connection string
+az eventhubs namespace authorization-rule keys list --resource-group $rgName --namespace-name $namespaceName --name RootManageSharedAccessKey --query primaryConnectionString
+
+```
+
+https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-quickstart-cli
+
+https://quarkus.io/guides/kafka#azure-event-hub
+
+# Azure Functions
+
+##
+
+## Deploy Quarkus Project to Azure Functions
+
+https://quarkus.io/guides/azure-functions
+
+Add Azure function extension:
+
+```PowerShell
+cd .\text-validator\
+.\mvnw.cmd quarkus:add-extension -Dextensions="io.quarkus:quarkus-azure-functions" -f ".\text-validator\pom.xml"
+```
+
+Login to Azure:
+
+```PowerShell
+az login
+```
+
+Deploy the Quarkus Project:
+
+```PowerShell
+./mvnw quarkus:deploy
 ```
