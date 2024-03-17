@@ -138,39 +138,41 @@ $rgParams = @{
 # Create the Azure Resource Group
 New-AzResourceGroup @rgParams
 
-# New-AzEventHubNamespace parameters
-$namespaceParams = @{
-    ResourceGroupName = $rgName
-    Name     = $namespaceName
-    Location          = $region
-}
+# Create an Event Hubs namespace.
+az eventhubs namespace create --name $namespaceName --resource-group $rgName -l $region --sku Standard
 
-# Create the Event Hub Namespace
-New-AzEventHubNamespace @namespaceParams
-
-
-# Event Hub parameters
-$ehubParams = @{
-    ResourceGroupName = $rgName
-    NamespaceName     = $namespaceName
-    EventHubName      = "eh-blog-001"
-}
-
-# Create the Azure Event Hub
-New-AzEventHub @ehubParams
-
+# collect the connection string
+az eventhubs namespace authorization-rule keys list --resource-group $rgName --namespace-name $namespaceName --name RootManageSharedAccessKey --query primaryConnectionString
 
 ```
 
-Error Message insofern nur mit PowerShell ausgeführt:
+https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-quickstart-cli
 
-```
-The subscription is not registered to use namespace 'Microsoft.EventHub'. See
-| https://aka.ms/rps-not-found for how to register subscriptions.
-```
+https://quarkus.io/guides/kafka#azure-event-hub
 
-Fix:
+# Azure Functions
+
+##
+
+## Deploy Quarkus Project to Azure Functions
+
+https://quarkus.io/guides/azure-functions
+
+Add Azure function extension:
 
 ```PowerShell
-az provider register --namespace 'Microsoft.EventHub'
+cd .\text-validator\
+.\mvnw.cmd quarkus:add-extension -Dextensions="io.quarkus:quarkus-azure-functions" -f ".\text-validator\pom.xml"
+```
+
+Login to Azure:
+
+```PowerShell
+az login
+```
+
+Deploy the Quarkus Project:
+
+```PowerShell
+./mvnw quarkus:deploy
 ```
