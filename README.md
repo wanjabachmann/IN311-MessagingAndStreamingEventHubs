@@ -176,3 +176,20 @@ Deploy the Quarkus Project:
 ```PowerShell
 ./mvnw quarkus:deploy
 ```
+
+Run function locally:
+
+```PowerShell
+.\mvnw clean -X
+
+
+.\mvnw clean install -X
+.\mvnw quarkus:run -X
+
+
+
+.\mvnw clean package
+```
+
+.\mvnw clean install
+.\mvnw quarkus:run
