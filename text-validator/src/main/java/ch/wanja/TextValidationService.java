@@ -11,10 +11,14 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.KafkaOutput;
 import com.microsoft.azure.functions.annotation.KafkaTrigger;
 
+import java.util.logging.Logger;
+
 /**
- * Azure Functions with HTTP Trigger integrated with Quarkus
+ * Azure Functions integrated with Quarkus
  */
 public class TextValidationService {
+
+    private static final Logger log = Logger.getLogger(TextValidationService.class.getName());
 
     public record ValidationResponse(long id, boolean valid) {
     }
@@ -35,10 +39,7 @@ public class TextValidationService {
             System.err.println("Error parsing JSON: " + e.getMessage());
             return;
         }
-
-        System.out.println("======================================");
-        System.out.println("Data: " + valueObject.toString());
-        System.out.println("======================================");
+        log.info("Data: " + valueObject.toString());
 
         // Extract content and handle potential missing id
         String content = (String) valueObject.get("content");
@@ -46,9 +47,7 @@ public class TextValidationService {
 
         boolean valid = !content.contains("0");
 
-        System.out.println("======================================");
-        System.out.println("Text-Validation: id " + id + " -> content " + content + " -> valid " + valid);
-        System.out.println("======================================");
+        log.info("Text-Validation: id " + id + " -> content " + content + " -> valid " + valid);
 
         ValidationResponse response = new ValidationResponse(id, valid);
 
