@@ -171,25 +171,14 @@ Login to Azure:
 az login
 ```
 
-Deploy the Quarkus Project:
+Run function locally:
+
+```PowerShell
+.\mvnw clean install && .\mvnw quarkus:run`
+```
+
+Deploy the Quarkus Azure function:
 
 ```PowerShell
 ./mvnw quarkus:deploy
 ```
-
-Run function locally:
-
-```PowerShell
-.\mvnw clean -X
-
-
-.\mvnw clean install -X
-.\mvnw quarkus:run -X
-
-
-
-.\mvnw clean package
-```
-
-.\mvnw clean install
-.\mvnw quarkus:run

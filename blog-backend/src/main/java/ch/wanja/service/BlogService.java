@@ -41,11 +41,12 @@ public class BlogService {
         var persistedBlog = persistBlog(newBlog);
         blogRepository.persist(newBlog);
 
-        blogPostEmitter.send(new ValidationRequest(persistedBlog.getId(), persistedBlog.getContent()))
+        blogPostEmitter.send(new ValidationRequest(persistedBlog.getId().longValue(), persistedBlog.getContent()))
                 .toCompletableFuture().join();
 
         System.out.println(
-                "Blog created with id: " + persistedBlog.getId() + " and content: " + persistedBlog.getContent());
+                "Blog created with id: " + persistedBlog.getId().longValue() + " and content: "
+                        + persistedBlog.getContent());
     }
 
     @Transactional
