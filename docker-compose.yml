@@ -15,18 +15,8 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 10s
       retries: 10
-
-  redpanda:
-    image: docker.redpanda.com/vectorized/redpanda:v23.3.5
-    command: redpanda start --advertise-kafka-addr redpanda-1:9092
-    ports:
-      - "9092:9092"
-    networks:
-      - blog-nw
-    container_name: redpanda-1
-
   backend:
-    image: ghcr.io/wanjabachmann/blog-backend:latest
+    image: ghcr.io/wanjabachmann/blog-backend-eventhub:latest
     depends_on:
       mysql:
         condition: service_healthy
@@ -34,14 +24,7 @@ services:
       - "8080:8080"
     networks:
       - blog-nw
-
-  textvalidator:
-    image: ghcr.io/wanjabachmann/textvalidator:latest
-    depends_on:
-      - mysql
-      - redpanda
-    networks:
-      - blog-nw
-
+    env_file:
+      - .\blog-backend\.env
 networks:
   blog-nw:
