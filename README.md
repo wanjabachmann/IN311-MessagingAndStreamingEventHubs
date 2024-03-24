@@ -195,7 +195,7 @@ The local.settings.json should now look like this:
 }
 ```
 
-Kudos to @langeneggerma for the help with the variable troubleshooting. 🙂
+Kudos to [@langeneggerma] for the help with the variable troubleshooting. 🙂
 
 Deploy the Quarkus Project as an Azure Function:
 
