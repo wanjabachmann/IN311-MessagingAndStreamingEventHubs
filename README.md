@@ -35,8 +35,8 @@ graph LR
     B -->| 4. Send Blog content to Event Hub | D
     D -->| 5. Blog Ready to Process | E
     E -->| 6. Validate & Add Metadata | B
-    B -->| 3. Add Blog to DB | C
-    B -->| 7. Update Blog on the DB | C
+    B <-->| 3. Add Blog to DB | C
+    B <-->| 7. Update Blog on the DB | C
 
 ```
 
