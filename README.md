@@ -163,7 +163,7 @@ cd .\blog-backend\
 # 🚀 Deploy the Quarkus Azure function
 
 Set the variables for the BrokerList & the EventHubConnectionString
-![Azure Variables](doc\FunctionVariables.png)
+![Azure Variables](/doc/FunctionVariables.png)
 
 You can then update the local.settings.json file with the following command:
 
